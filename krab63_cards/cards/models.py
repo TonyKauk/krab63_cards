@@ -5,6 +5,10 @@ from django.db import models
 
 class Card(models.Model):
     """Модель карты."""
+    EXPIRED = 'Просрочена'
+    ACTIVE = 'Активирована'
+    NOT_ACTIVE = 'Деактивирована'
+
     series = models.IntegerField(verbose_name='Серия карты')
     number = models.IntegerField(verbose_name='Номер карты')
     issue_date = models.DateTimeField(verbose_name='Дата выпуска')
@@ -14,27 +18,27 @@ class Card(models.Model):
         default='Не активирована', verbose_name='Статус',
     )
 
-    def status(self):
-        if self._check_date(self) == 'Просрочена':
-            return 'Просрочена'
-        return self.status
-
     def _check_date(self):
         if self.expire_date >= datetime.now():
-            return 'Не просрочена'
-        return 'Просрочена'
+            return True
+        return False
+
+    def status(self):
+        if not self._check_date(self):
+            return self.EXPIRED
+        return self.status
 
     def activate(self):
-        if self._check_date(self) == 'Не просрочена':
-            self.status = 'Активирована'
+        if self._check_date(self):
+            self.status = self.ACTIVE
 
     def deactivate(self):
-        if self._check_date(self) == 'Не просрочена':
-            self.status = 'Деактивирована'
+        if self._check_date(self):
+            self.status = self.NOT_ACTIVE
 
     def save(self, *args, **kwargs):
-        if self._check_date(self) == 'Просрочена':
-            self.status = 'Просрочена'
+        if not self._check_date(self):
+            self.status = self.EXPIRED
         super(Card, self).save(*args, **kwargs)
 
     class Meta:

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-11 p-5">
+      Добро пожаловать на тест "{{ quiz.name }}"! В вашем распоряжении... 
+      бесконечное количество минут. На все вопросы нужно ответить
+      последовательно, возвращаться нельзя, пропускать нельзя. И не пытайтесь
+      выбрать сразу все варианты. Удачи)
+
+      <div class="col-md-6 offset-md-5">
+        <a class="btn btn-secondary"
+          href="{% url 'quizes:quiz_question' quiz_id=quiz.id question_id=first_question_id %}"
+          role="button">Начать</a>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

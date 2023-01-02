@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-11 p-5">
+
+      <p class="h3">{{ quiz.name }}</p>
+      <p class="h4">{{ question.text }}</p>
+
+      <form
+        action="{% url 'quizes:quiz_question' quiz_id=quiz_id question_id=question.id %}"
+        method="post">
+        {% csrf_token %}
+
+        <div class="form-group form-check">
+          <label for="answers">Варианты ответов на вопрос:</label>
+          {{ question_result_form.answers }}
+        </div>
+
+        <div class="formErrors">
+          {{ question_result_form.answers.errors }}
+        </div>
+
+        <p>
+          <input class="btn btn-secondary" type="submit" value="Ответить">
+        </p>
+      </form>
+
+    </div>
+  </div>
+{% endblock %}
