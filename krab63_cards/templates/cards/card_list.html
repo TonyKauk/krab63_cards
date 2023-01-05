@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-11 p-5">
+    
+      {% if cards %}
+      <ul class="list-group">
+        {% for card in cards %}
+          <li class="list-group-item">
+            <p class="h4">
+              <a class="nav-link"
+                href="{% url 'cards:card_info' card_id=card.id %}">
+                {{ card.series }}
+              </a>
+            </p>
+          </li>
+        {% endfor %}
+      </ul>
+
+      {% else %}
+        Пока ни одной карты (((
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

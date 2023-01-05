@@ -4,10 +4,10 @@
       <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
         <a class="nav-link
-          {% if request.resolver_match.view_name  == 'cards:cards_list' %}
+          {% if request.resolver_match.view_name  == 'cards:card_list' %}
             active
           {% endif %}"
-          href="{% url 'cards:cards_list' %}">Список карт
+          href="{% url 'cards:card_list' %}">Список карт
         </a>
       </li>
     </div>

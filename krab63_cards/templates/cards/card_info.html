@@ -3,30 +3,61 @@
 {% block content %}
   <div class="row justify-content-center">
     <div class="col-md-11 p-5">
-      <p class="h3">Тест {{ quiz_name }} завершен! Вот его результаты:</p>
+      <p class="h3">Карта {{ card.series }}, вот информация по ней:</p>
 
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Всего вопросов</th>
-            <th scope="col">Правильных ответов</th>
-            <th scope="col">Рейтинг в %</th>
+            <th scope="col">Серия</th>
+            <th scope="col">Номер</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Активация</th>
+            <th scope="col">Удаление</th>
           </tr>
         </thead>
 
         <tbody>
             <tr>
-              <td>{{ quiz_result.total_questions_count }}</td>
-              <td>{{ quiz_result.correct_answers_count }}</td>
-              <td>{{ quiz_result.correct_answer_ratio }}</td>
+              <td>{{ card.series }}</td>
+              <td>{{ card.number }}</td>
+              <td>{{ card.get_status }}</td>
+              <td>
+                {% if card.get_status == 'Просрочена' %}
+                  <p class="text-secondary">
+                    Карта просрочена, нельзя изменить ее статус
+                  </p>
+                {% elif card.get_status == 'Активирована' %}
+                  <div class="col-md-6 offset-md-5">
+                    <a
+                      class="btn btn-primary"
+                      href="{% url 'cards:card_deactivate' card_id=card.id %}"
+                      role="button">Деактивировать</a>
+                  </div>
+                {% else %}
+                  <div class="col-md-6 offset-md-5">
+                    <a
+                      class="btn btn-success"
+                      href="{% url 'cards:card_activate' card_id=card.id %}"
+                      role="button">Активировать</a>
+                  </div>
+                {% endif %}
+              </td>
+              <td>
+                <div class="col-md-6 offset-md-5">
+                  <a
+                    class="btn btn-danger"
+                    href="{% url 'cards:card_delete' card_id=card.id %}"
+                    role="button">Удалить</a>
+                </div>
+              </td>
             </tr>
         </tbody>
       </table>
 
       <div class="col-md-6 offset-md-5">
         <a
-          class="btn btn-secondary" href="{% url 'quizes:quizes_list' %}"
-          role="button">К списку тестов</a>
+          class="btn btn-secondary" href="{% url 'cards:card_list' %}"
+          role="button">К списку карт</a>
       </div>
 
     </div>

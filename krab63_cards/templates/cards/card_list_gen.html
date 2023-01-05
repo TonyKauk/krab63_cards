@@ -4,18 +4,25 @@
   <div class="row justify-content-center">
     <div class="col-md-11 p-5">
     
-      {% if cards %}
+      {% if current_cards %}
       <ul class="list-group">
-        {% for card in cards %}
+        {% for card in current_cards %}
           <li class="list-group-item">
             <p class="h4">
               <a class="nav-link"
-                href="{% url 'cards:card_info' card_id=card.id %}">{{ card.series }}
+                href="{% url 'cards:card_info' card_id=card.id %}">
+                {{ card.number }} - {{ card.previous_card_number }} - {{ card.free_slots_before }}
               </a>
             </p>
           </li>
         {% endfor %}
       </ul>
+
+      {{ prepared_numbers }}
+
+      {{ current_cards_numbers }}
+
+      {{ current_cards_numbers_lst }}
 
       {% else %}
         Пока ни одной карты (((
