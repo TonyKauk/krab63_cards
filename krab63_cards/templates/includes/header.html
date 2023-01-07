@@ -2,14 +2,25 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link
-          {% if request.resolver_match.view_name  == 'cards:card_list' %}
-            active
-          {% endif %}"
-          href="{% url 'cards:card_list' %}">Список карт
-        </a>
-      </li>
+
+        <li class="nav-item active">
+          <a class="nav-link
+            {% if request.resolver_match.view_name  == 'cards:card_list' %}
+              active
+            {% endif %}"
+            href="{% url 'cards:card_list' %}">Список карт
+          </a>
+        </li>
+
+        <li class="nav-item active">
+          <a class="nav-link
+            {% if request.resolver_match.view_name  == 'cards:card_generator' %}
+              active
+            {% endif %}"
+            href="{% url 'cards:card_generator' %}">Генератор карт
+          </a>
+        </li>
+
     </div>
   </nav>
 </header>

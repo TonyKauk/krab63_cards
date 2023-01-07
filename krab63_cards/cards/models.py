@@ -7,7 +7,12 @@ class Card(models.Model):
     """Модель карты."""
     EXPIRED = 'Просрочена'
     ACTIVE = 'Активирована'
-    NOT_ACTIVE = 'Деактивирована'
+    NOT_ACTIVE = 'Не активирована'
+    STATUS_CHOICES = (
+        (EXPIRED, EXPIRED),
+        (ACTIVE, ACTIVE),
+        (NOT_ACTIVE, NOT_ACTIVE),
+    )
 
     series = models.IntegerField(
         verbose_name='Серия карты', validators=[
@@ -25,7 +30,8 @@ class Card(models.Model):
     expire_date = models.DateTimeField(verbose_name='Дата окончания')
     current_sum = models.FloatField(verbose_name='Остаток на карте')
     status = models.CharField(
-        default='Не активирована', verbose_name='Статус', max_length=50,
+        choices=STATUS_CHOICES, default=NOT_ACTIVE, verbose_name='Статус',
+        max_length=20,
     )
 
     def _check_date(self):

@@ -2,26 +2,52 @@
 
 {% block content %}
   <div class="row justify-content-center">
-    <div class="col-md-11 p-5">
-    
-      {% if cards %}
-      <ul class="list-group">
-        {% for card in cards %}
-          <li class="list-group-item">
-            <p class="h4">
-              <a class="nav-link"
-                href="{% url 'cards:card_info' card_id=card.id %}">
-                {{ card.series }}
-              </a>
-            </p>
-          </li>
-        {% endfor %}
-      </ul>
+    <div class="col-md-8 p-5">
+      <div class="card">
+        <div class="card-header">
+          <p class="h4">Генератор карт</p>
+        </div>
+        <div class="card-body">
+          {% if form.errors %}
+            {% for field in form %}
+              {% for error in field.errors %}
+                <div class="alert alert-danger">
+                  {{ error|escape }}
+                </div>
+              {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+              <div class="alert alert-danger">
+                {{ error|escape }}
+              </div>
+            {% endfor %}
+          {% endif %}
 
-      {% else %}
-        Пока ни одной карты (((
-      {% endif %}
-
-    </div>
+            <form method="post" action="{% url 'cards:card_generator' %}">
+              {% csrf_token %}
+              {% for field in form %}
+              <div class="form-group row my-3 p-3">
+                <label for="{{ field.id_for_label }}">
+                  {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.help_text %}
+                  <small
+                    id="{{ field.id_for_label }}-help"
+                    class="form-text text-muted">
+                    {{ field.help_text|safe }}
+                  </small>
+                {% endif %}
+              </div>
+              {% endfor %}
+              <div class="col-md-6 offset-md-4">
+                <button type="submit" class="btn btn-secondary">
+                  Сгенерировать карты
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
   </div>
 {% endblock %}
