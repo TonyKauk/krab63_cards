@@ -9,23 +9,27 @@ class CardSearchForm(forms.Form):
     EXPIRED = 'Просрочена'
     ACTIVE = 'Активирована'
     NOT_ACTIVE = 'Не активирована'
+    ANY = 'Любой'
     STATUS_CHOICES = (
         (EXPIRED, EXPIRED),
         (ACTIVE, ACTIVE),
         (NOT_ACTIVE, NOT_ACTIVE),
+        (ANY, ANY),
+
     )
 
     series = forms.IntegerField(label='Серия карты', required=False)
     number = forms.IntegerField(label='Номер карты', required=False)
     issue_date = forms.DateField(
         label='Дата выпуска карты', required=False,
-        widget=forms.SelectDateWidget,
+        widget=forms.DateInput(attrs=dict(type='date')),
     )
-    expire_date = forms.DateTimeField(
+    expire_date = forms.DateField(
         label='Окончание срока действия карты', required=False,
+        widget=forms.DateInput(attrs=dict(type='date')),
     )
     status = forms.TypedChoiceField(
-        label='Cтатус', choices=STATUS_CHOICES, required=True,
+        label='Cтатус', choices=STATUS_CHOICES, required=False,
         coerce=int,
     )
 

@@ -1,3 +1,4 @@
+import datetime
 from dateutil.relativedelta import relativedelta
 
 from django.shortcuts import get_object_or_404, redirect, render
@@ -19,9 +20,9 @@ class CardListView(generic.ListView):
     def get_queryset(self):
         series = self.request.GET.get('series', False)
         number = self.request.GET.get('number', False)
-        issue_date = self.request.GET.get('issue_date', False)
-        # expire_date = self.request.GET['expire_date']
-        # status = self.request.GET['status']
+        issue_date_text = self.request.GET.get('issue_date', False)
+        expire_date_text = self.request.GET.get('expire_date', False)
+        status = self.request.GET.get('status', CardSearchForm.ANY)
 
         cards = self.model.objects.all()
 
@@ -31,7 +32,29 @@ class CardListView(generic.ListView):
         if number:
             cards = cards.filter(number=number)
 
-        
+        if issue_date_text:
+            issue_date = datetime.datetime.strptime(
+                issue_date_text, "%Y-%m-%d"
+            ).date()
+            cards = cards.filter(
+                issue_date__year=issue_date.year,
+                issue_date__month=issue_date.month,
+                issue_date__day=issue_date.day,
+            )
+
+        if expire_date_text:
+            expire_date = datetime.datetime.strptime(
+                expire_date_text, "%Y-%m-%d"
+            ).date()
+            cards = cards.filter(
+                expire_date__year=expire_date.year,
+                expire_date__month=expire_date.month,
+                expire_date__day=expire_date.day,
+            )
+
+        if status != CardSearchForm.ANY:
+            cards = cards.filter(status=status)
+
         return cards
 
     def get_context_data(self, **kwargs):
