@@ -4,13 +4,15 @@
   <div class="row justify-content-center">
     <div class="col-md-11 p-5">
       <p class="h3">
-        Карта {{ card.series }} {{ card.number }}, деактивирована!
+        Карта {{ card.series|stringformat:"04d" }} 
+        {{ card.number|stringformat:"08d" }}, деактивирована!
       </p>
 
       <div class="col-md-6 offset-md-5">
         <a
           class="btn btn-secondary" href="{% url 'cards:card_list' %}"
-          role="button">К списку карт</a>
+          role="button">К списку карт
+        </a>
       </div>
     </div>
   </div>

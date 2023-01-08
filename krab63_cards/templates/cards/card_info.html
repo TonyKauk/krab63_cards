@@ -3,7 +3,9 @@
 {% block content %}
   <div class="row justify-content-center">
     <div class="col-md-11 p-5">
-      <p class="h3">Карта {{ card.series }}, вот информация по ней:</p>
+      <p class="h3">Карта {{ card.series|stringformat:"04d" }}
+        {{ card.number|stringformat:"08d" }}, вот информация по ней:
+      </p>
 
       <table class="table">
         <thead>
@@ -11,15 +13,15 @@
             <th scope="col">Серия</th>
             <th scope="col">Номер</th>
             <th scope="col">Статус</th>
-            <th scope="col">Активация</th>
+            <th scope="col">Изменение статуса</th>
             <th scope="col">Удаление</th>
           </tr>
         </thead>
 
         <tbody>
             <tr>
-              <td>{{ card.series }}</td>
-              <td>{{ card.number }}</td>
+              <td>{{ card.series|stringformat:"04d" }}</td>
+              <td>{{ card.number|stringformat:"08d" }}</td>
               <td>{{ card.get_status }}</td>
               <td>
                 {% if card.get_status == 'Просрочена' %}
@@ -27,37 +29,61 @@
                     Карта просрочена, нельзя изменить ее статус
                   </p>
                 {% elif card.get_status == 'Активирована' %}
-                  <div class="col-md-6 offset-md-5">
+                  <div class="col-md-6 offset-md-0">
                     <a
                       class="btn btn-primary"
                       href="{% url 'cards:card_deactivate' card_id=card.id %}"
-                      role="button">Деактивировать</a>
+                      role="button">Деактивировать
+                    </a>
                   </div>
                 {% else %}
-                  <div class="col-md-6 offset-md-5">
+                  <div class="col-md-6 offset-md-0">
                     <a
                       class="btn btn-success"
                       href="{% url 'cards:card_activate' card_id=card.id %}"
-                      role="button">Активировать</a>
+                      role="button">Активировать
+                    </a>
                   </div>
                 {% endif %}
               </td>
               <td>
-                <div class="col-md-6 offset-md-5">
+                <div class="col-md-6 offset-md-0">
                   <a
                     class="btn btn-danger"
                     href="{% url 'cards:card_delete' card_id=card.id %}"
-                    role="button">Удалить</a>
+                    role="button">Удалить
+                  </a>
                 </div>
               </td>
             </tr>
         </tbody>
       </table>
 
+    {% if operations %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Название операции</th>
+            <th scope="col">Сумма операции</th>
+          </tr>
+        </thead>
+
+        {% for operation in operations %}
+        <tbody>
+            <tr>
+              <td>{{ operation.name }}</td>
+              <td>{{ operation.sum }}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+      </table>
+    {% endif %}
+
       <div class="col-md-6 offset-md-5">
         <a
           class="btn btn-secondary" href="{% url 'cards:card_list' %}"
-          role="button">К списку карт</a>
+          role="button">К списку карт
+        </a>
       </div>
 
     </div>

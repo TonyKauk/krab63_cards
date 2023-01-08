@@ -14,16 +14,21 @@ class Card(models.Model):
         (NOT_ACTIVE, NOT_ACTIVE),
     )
 
+    MAX_NUMBER = 99999999
+    MAX_SERIES = 9999
+    MIN_NUMBER = 1
+    MIN_SERIES = 1
+
     series = models.IntegerField(
         verbose_name='Серия карты', validators=[
-            MaxValueValidator(9999),
-            MinValueValidator(1),
+            MaxValueValidator(MAX_SERIES),
+            MinValueValidator(MIN_SERIES),
         ]
     )
     number = models.IntegerField(
         verbose_name='Номер карты', validators=[
-            MaxValueValidator(99999999),
-            MinValueValidator(1),
+            MaxValueValidator(MAX_NUMBER),
+            MinValueValidator(MIN_NUMBER),
         ]
     )
     issue_date = models.DateTimeField(verbose_name='Дата выпуска')
@@ -55,6 +60,9 @@ class Card(models.Model):
     def save(self, *args, **kwargs):
         if not self._check_date():
             self.status = self.EXPIRED
+        else:
+            if self.status == self.EXPIRED:
+                self.status = self.NOT_ACTIVE
         super(Card, self).save(*args, **kwargs)
 
     class Meta:
@@ -76,8 +84,8 @@ class Operation(models.Model):
     card = models.ForeignKey(
         Card, on_delete=models.CASCADE, related_name='operations',
     )
-    operation_date = models.DateTimeField(verbose_name='Дата операции')
-    operation_sum = models.FloatField(verbose_name='Сумма операции')
+    name = models.CharField(max_length=50, verbose_name='Название операции')
+    sum = models.FloatField(verbose_name='Сумма операции')
 
     class Meta:
         verbose_name = 'Операция'

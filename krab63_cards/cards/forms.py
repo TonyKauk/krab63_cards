@@ -43,8 +43,8 @@ class CardGeneratorForm(forms.Form):
         ('12', 'Один год'),
     )
     MAX_QUANTYTY_OF_CARDS = 99999999
-    MAX_SERIES_NUMBER = 9999
-    MIN_SERIES_NUMBER = 1
+    MAX_SERIES = 9999
+    MIN_SERIES = 1
 
     series = forms.IntegerField(label='Серия карт', required=False)
     quantity = forms.IntegerField(label='Количество карт', required=False)
@@ -59,7 +59,7 @@ class CardGeneratorForm(forms.Form):
             raise forms.ValidationError(
                 'Номер серии обязательно должен быть указан'
             )
-        if data > self.MAX_SERIES_NUMBER or data < self.MIN_SERIES_NUMBER:
+        if data > self.MAX_SERIES or data < self.MIN_SERIES:
             raise forms.ValidationError(
                 'Номер серии должен быть больше 0 и меньше 10000'
             )

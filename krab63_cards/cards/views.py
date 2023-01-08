@@ -8,7 +8,7 @@ from django.db.models import Window, F
 from django.db.models.functions import Lag
 
 from .forms import CardGeneratorForm, CardSearchForm
-from .models import Card
+from .models import Card, Operation
 
 
 class CardListView(generic.ListView):
@@ -52,6 +52,9 @@ class CardListView(generic.ListView):
                 expire_date__day=expire_date.day,
             )
 
+        for card in cards:
+            card.save()
+
         if status != CardSearchForm.ANY:
             cards = cards.filter(status=status)
 
@@ -59,7 +62,7 @@ class CardListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CardListView, self).get_context_data(**kwargs)
-        context['form'] = CardSearchForm()
+        context['form'] = CardSearchForm(self.request.GET)
         return context
 
 
@@ -68,6 +71,13 @@ class CardDetailView(generic.DetailView):
     template_name = 'cards/card_info.html'
     model = Card
     pk_url_kwarg = 'card_id'
+
+    def get_context_data(self, **kwargs):
+        context = super(CardDetailView, self).get_context_data(**kwargs)
+        context['operations'] = Operation.objects.filter(
+            card=context['object']
+        )
+        return context
 
 
 def card_activate(request, card_id):
